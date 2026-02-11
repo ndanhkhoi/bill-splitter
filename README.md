@@ -32,7 +32,7 @@
 
 ```bash
 # Clone repository
-git clone <your-repo-url>
+git clone https://github.com/ndanhkhoi/bill-splitter.git
 
 # Di chuyển vào thư mục project
 cd bill-splitter
