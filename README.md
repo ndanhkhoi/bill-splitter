@@ -11,6 +11,8 @@
 [![Vite](https://img.shields.io/badge/Vite-7.3-purple)](https://vitejs.dev/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1-38BDF8)](https://tailwindcss.com/)
 
+**Live Demo:** [https://bill-shared.ndanhkhoi.name.vn](https://bill-shared.ndanhkhoi.name.vn)
+
 </div>
 
 ## Vấn đề & Giải pháp
