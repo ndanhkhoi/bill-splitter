@@ -13,17 +13,20 @@
 
 </div>
 
-## ✨ Tính năng
+## Tính năng
 
-- 📋 **Quản lý bill** - Tạo, xem, sửa, xóa bill dễ dàng
-- 👥 **Quản lý nhóm** - Thêm/bỏ người tham gia linh hoạt
-- 💰 **Theo dõi chi tiêu** - Thêm khoản chi, chọn người trả và người chia sẻ
-- 🧮 **Tính toán chính xác** - Sử dụng `big.js` để tính toán chính xác tuyệt đối
-- ⚡ **Tối ưu hóa thanh toán** - Tự động tính toán cách chia tiền để giảm số lần chuyển tiền
-- 💾 **Lưu trữ cục bộ** - Dữ liệu được lưu trong localStorage, bảo mật, không cần server
-- 📱 **Responsive** - Hoạt động mượt mà trên mọi thiết bị
+- **Quản lý bill** - Tạo, xem, sửa, xóa bill dễ dàng
+- **Quản lý nhóm** - Thêm/bỏ người tham gia linh hoạt
+- **Theo dõi chi tiêu** - Thêm khoản chi, chọn người trả và người chia sẻ
+- **Tính toán chính xác** - Sử dụng `big.js` để tính toán chính xác tuyệt đối
+- **Tối ưu hóa thanh toán** - Tự động tính toán cách chia tiền để giảm số lần chuyển tiền
+- **Thông tin ngân hàng** - Hỗ trợ 60+ ngân hàng tại Việt Nam
+- **QR Code riêng** - Tự động tạo QR chuyển khoản cho từng người cần trả tiền
+- **Chia sẻ URL** - Chia sẻ bill qua link nén với LZString
+- **Lưu trữ cục bộ** - Dữ liệu được lưu trong localStorage, bảo mật, không cần server
+- **Responsive** - Hoạt động mượt mà trên mọi thiết bị
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Cài đặt
 
@@ -58,7 +61,7 @@ npm run build
 npm run preview
 ```
 
-## 🛠️ Công nghệ
+## Công nghệ
 
 | Thư viện | Phiên bản | Mục đích |
 |----------|----------|----------|
@@ -70,8 +73,10 @@ npm run preview
 | Framer Motion | 12.34.0 | Animations |
 | big.js | 7.0.1 | Xử lý số thập phân chính xác |
 | Lucide React | 0.563.0 | Icons |
+| React Select | 5.10.2 | Dropdown select |
+| LZString | 1.5.0 | URL compression |
 
-## 📁 Cấu trúc project
+## Cấu trúc project
 
 ```
 bill-splitter/
@@ -80,66 +85,89 @@ bill-splitter/
 ├── src/
 │   ├── components/
 │   │   ├── ui/              # UI components (Button, Card, Input, Select, Checkbox)
-│   │   ├── layout/          # Layout components (Header, Container)
+│   │   ├── layout/          # Layout components (Header, ScreenHeader, Container)
 │   │   ├── StepIndicator.tsx
 │   │   ├── PersonList.tsx
+│   │   ├── BankInfoForm.tsx
 │   │   ├── ExpenseForm.tsx
 │   │   ├── ExpenseList.tsx
+│   │   ├── BillSummary.tsx
+│   │   ├── SettlementDetailsCard.tsx
+│   │   ├── OptimalTransactions.tsx
 │   │   ├── SettlementReport.tsx
-│   │   └── BillList.tsx
+│   │   ├── BillList.tsx
+│   │   ├── SharedBillView.tsx
+│   │   └── BillFooter.tsx
 │   ├── stores/
 │   │   └── billStore.ts     # Zustand store với persist middleware
 │   ├── types/
 │   │   └── index.ts         # TypeScript type definitions
 │   ├── utils/
-│   │   └── calculateSettlement.ts  # Logic tính toán chia tiền
+│   │   ├── calculateSettlement.ts  # Logic tính toán chia tiền
+│   │   ├── calculatePersonDetails.ts  # Chi tiết giao dịch mỗi người
+│   │   └── shareBill.ts     # Encode/decode share URL
+│   ├── constants/
+│   │   └── bankNames.ts     # Danh sách 60+ ngân hàng VN
 │   ├── App.tsx
 │   ├── main.tsx
 │   └── index.css
-├── index.html               # Meta tags đầy đủ cho SEO
+├── index.html
 ├── vite.config.ts
 ├── tailwind.config.js
 └── tsconfig.json
 ```
 
-## 💡 Hướng dẫn sử dụng
+## Hướng dẫn sử dụng
 
-1. **Tạo Bill mới**
-   - Click "Tạo Bill mới"
-   - Nhập tên buổi chơi/nhóm
-   - Thêm người tham gia
+### Tạo Bill mới
 
-2. **Thêm chi tiêu**
-   - Chọn người trả tiền
-   - Nhập số tiền và tên khoản chi
-   - Chọn những người chia sẻ khoản đó
+1. Click "Tạo Bill mới"
+2. Nhập tên buổi chơi/nhóm
+3. Thêm người tham gia (tối thiểu 2 người)
+4. (Tùy chọn) Thêm thông tin ngân hàng để nhận tiền
 
-3. **Xem báo cáo**
-   - Xem tổng chi tiêu, trung bình mỗi người
-   - Xem chi tiết công nợ của mỗi người
-   - Xem cách thanh toán tối ưu (giảm số lần chuyển)
+### Thêm chi tiêu
 
-4. **Quản lý bill cũ**
-   - Click vào bill → Xem báo cáo
-   - Click icon bút → Sửa bill
-   - Click icon thùng rác → Xóa bill
+1. Chọn người trả tiền
+2. Nhập số tiền và tên khoản chi
+3. Chọn những người chia sẻ khoản đó
 
-## 🎨 Giao diện
+### Xem báo cáo
+
+- Tổng chi tiêu, trung bình mỗi người
+- Chi tiết công nợ của mỗi người (đã chi, cần trả/cần nhận)
+- QR Code chuyển khoản cho từng người cần trả
+- Cách thanh toán tối ưu (giảm số lần chuyển)
+
+### Chia sẻ bill
+
+1. Click "Chia sẻ" ở màn hình báo cáo
+2. Link sẽ được copy vào clipboard
+3. Gửi link cho bạn bè để họ xem
+
+### Quản lý bill cũ
+
+- Click vào bill → Xem báo cáo
+- Click icon bút → Sửa bill
+- Click icon thùng rác → Xóa bill
+
+## Giao diện
 
 App sử dụng phong cách **Glassmorphism** với:
 - Background gradient tím-xanh dương
 - Cards trong suốt với backdrop blur
 - Animations mượt mà với Framer Motion
 - Responsive design cho mobile và desktop
+- Custom QR Code từ VietQR API
 
-## 📄 License
+## Credits
+
+QR Code generation powered by [VietQR.io](https://vietqr.io) - API miễn phí tạo mã QR chuyển khoản ngân hàng Việt Nam.
+
+## License
 
 MIT License - freely usable for personal and commercial projects.
 
-## 🤝 Đóng góp
-
-Contributions, issues and feature requests are welcome!
-
 ---
 
-Made with ❤️ using React + TypeScript + TailwindCSS
+Made with [Heart](public/favicon.svg) using React + TypeScript + TailwindCSS

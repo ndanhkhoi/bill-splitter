@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Chia Bill is a Vietnamese bill splitting application for groups with a modern glassmorphism UI. Users can create bills, manage participants, track expenses, calculate optimal settlements, and view/edit saved bills. All data persists locally using localStorage via Zustand's persist middleware.
+Chia Bill is a Vietnamese bill splitting application for groups with a modern glassmorphism UI. Users can create bills, manage participants, track expenses, calculate optimal settlements, add bank information, generate individual QR codes for payments, and share bills via compressed URLs. All data persists locally using localStorage via Zustand's persist middleware.
 
 ## Development Commands
 
@@ -33,6 +33,9 @@ npm run preview
 - **Animations**: Framer Motion 12.34.0 for screen transitions
 - **Financial Calculations**: big.js 7.0.1 for precise decimal math (avoids floating-point errors)
 - **Icons**: Lucide React 0.563.0
+- **Select Dropdown**: React Select 5.10.2 with custom glassmorphism styling
+- **URL Compression**: LZString 1.5.0 for sharing bills via compressed URLs
+- **QR Generation**: VietQR API for payment QR codes
 
 ## Architecture
 
@@ -41,11 +44,12 @@ npm run preview
 The app follows a multi-screen pattern managed by `App.tsx` with screen state:
 
 - **Home** (`home`): Bill list - view, create, edit, or delete saved bills
-- **Setup** (`setup`): Add participants to the group
+- **Setup** (`setup`): Add participants and bank information
 - **Expenses** (`expenses`): Add individual expenses with payer/participant selection
-- **Report** (`report`): View settlement calculations
+- **Report** (`report`): View settlement calculations with QR codes
+- **Shared** (`shared`): View-only mode for shared bill links
 
-Navigation state is tracked via `screen` state ('home' | 'setup' | 'expenses' | 'report') with Framer Motion AnimatePresence for slide transitions.
+Navigation state is tracked via `screen` state ('home' | 'setup' | 'expenses' | 'report' | 'shared') with Framer Motion AnimatePresence for slide transitions.
 
 ### State Management
 
@@ -63,6 +67,7 @@ interface BillStore {
   setCurrentBill: (bill: Bill | null) => void;
   deleteBill: (id: string) => void;
   clearCurrentBill: () => void;
+  updateBankInfo: (bankCode?: string, accountNumber?: string) => void;
 }
 ```
 
@@ -79,6 +84,25 @@ Located in `src/utils/calculateSettlement.ts`:
 - Implements greedy algorithm in `optimizeTransactions()` to minimize transaction count
 - **Currency formatting**: Vietnamese đồng (₫) with dot separators, 0 decimal places (e.g., "100.000₫")
 - Helper functions: `formatCurrency()` and `parseCurrencyInput()`
+
+### Person Details Calculation
+
+Located in `src/utils/calculatePersonDetails.ts`:
+
+- `calculatePersonDetails(personId, bill)` returns detailed transaction info for a person:
+  - `totalPaid`: Total amount this person paid
+  - `paidExpenses`: List of expenses this person paid
+  - `participatedExpenses`: List of expenses this person participated in with their share
+
+### Bill Sharing
+
+Located in `src/utils/shareBill.ts`:
+
+- Uses LZString compression to encode bill data into URL-safe strings
+- `encodeBillToUrl(bill)`: Compresses bill to URL-safe string
+- `decodeBillFromUrl(encoded)`: Decompresses and validates bill data
+- `generateShareUrl(bill)`: Creates full shareable URL
+- `parseSharedBillFromUrl()`: Extracts bill from current URL parameters
 
 ### Type System
 
@@ -104,6 +128,8 @@ interface Bill {
   date: string;
   people: Person[];
   expenses: Expense[];
+  bankCode?: string; // Optional: Bank code for receiving payments
+  accountNumber?: string; // Optional: Account number for receiving payments
 }
 
 interface Settlement {
@@ -123,15 +149,28 @@ interface Transaction {
 
 ```
 src/components/
-├── ui/              # Reusable UI primitives (Button, Card, Input, Select, Checkbox)
-│   └── Card.tsx     # IMPORTANT: CardProps extends React.HTMLAttributes for onClick support
-├── layout/          # Header and Container wrappers
-├── StepIndicator.tsx
-├── PersonList.tsx
-├── ExpenseForm.tsx
-├── ExpenseList.tsx
-├── SettlementReport.tsx
-└── BillList.tsx     # Handles bill viewing, editing, and deletion
+├── ui/              # Reusable UI primitives
+│   ├── Button.tsx    # Glassmorphism styled button with variants (primary, secondary, ghost)
+│   ├── Card.tsx      # IMPORTANT: CardProps extends React.HTMLAttributes for onClick support
+│   ├── Input.tsx     # Floating label input with glassmorphism
+│   ├── Select.tsx    # Custom select (not currently used, replaced by react-select)
+│   └── Checkbox.tsx # Custom checkbox component
+├── layout/          # Layout components
+│   ├── Header.tsx    # App header with home button
+│   ├── ScreenHeader.tsx  # Screen title with back button
+│   └── Container.tsx    # Content container with max-width
+├── StepIndicator.tsx    # Shows current step in bill creation flow
+├── PersonList.tsx        # Add/remove participants
+├── BankInfoForm.tsx      # Bank selection with react-select dropdown
+├── ExpenseForm.tsx       # Add new expense form
+├── ExpenseList.tsx        # List of added expenses
+├── BillSummary.tsx        # Summary stats (total, per person, expense count)
+├── SettlementDetailsCard.tsx  # Expandable cards showing each person's details + QR
+├── OptimalTransactions.tsx    # Shows optimized payment transactions
+├── SettlementReport.tsx   # Main report screen with share functionality
+├── BillList.tsx          # Home screen bill list with edit/delete
+├── SharedBillView.tsx     # View-only mode for shared bills
+└── BillFooter.tsx         # Footer component (unused)
 ```
 
 UI components use glassmorphism styling: `backdrop-blur-xl bg-white/10 border border-white/20`.
@@ -139,19 +178,39 @@ UI components use glassmorphism styling: `backdrop-blur-xl bg-white/10 border bo
 ### Bill Management Flow
 
 1. **Create Bill**: From home screen, click "Tạo Bill mới" → enter name → goes to Setup
-2. **View Bill**: Click on bill card → goes directly to Report screen
-3. **Edit Bill**: Click edit icon (pencil) → goes to Setup screen
-4. **Delete Bill**: Click delete icon (trash) → confirms → removes from list
-5. **Save Bill**: Automatic via `saveCurrentBillToList()` when finishing
+2. **Setup**: Add participants (min 2) → optionally add bank info → continue to Expenses
+3. **Expenses**: Add expenses with payer/participant selection → continue to Report
+4. **Report**: View settlements, QR codes, optimized transactions → Save or Share
+5. **View Bill**: Click on bill card → goes directly to Report screen
+6. **Edit Bill**: Click edit icon (pencil) → goes to Setup screen
+7. **Delete Bill**: Click delete icon (trash) → confirms → removes from list
+
+### Bank Information & QR Codes
+
+- Bank info is optional, stored in `Bill.bankCode` and `Bill.accountNumber`
+- Bank selection uses React Select with custom glassmorphism styles
+- Bank codes defined in `src/constants/bankNames.ts` (60+ Vietnamese banks)
+- QR codes generated via VietQR API: `https://img.vietqr.io/image/{bankCode}-{accountNumber}-print.png?amount={amount}&addInfo={memo}`
+- QR codes are individualized per person with specific amount and memo
+- SettlementDetailsCard shows QR only for people who need to pay (negative balance)
+- Download button allows saving QR image locally
+
+### Share Functionality
+
+- Click "Chia sẻ" button copies share URL to clipboard
+- URL format: `{baseUrl}?data={compressedBillData}`
+- Shared bills are view-only (no editing)
+- SharedView mode shows same report but with "Tạo bill của bạn" button instead of save/share
 
 ### Styling Conventions
 
 - TailwindCSS v4 with `@import "tailwindcss"` in `src/index.css`
 - Glassmorphism theme with gradient background (`from-slate-900 via-purple-900 to-slate-900`)
 - Custom scrollbar styling in index.css
-- Mobile-first responsive design
+- Mobile-first responsive design (use `sm:` prefix for tablet+)
 - Framer Motion for screen transitions (slide left/right with fade)
 - Buttons use `inline-flex items-center justify-center gap-2` for proper icon+text alignment
+- React Select custom styles in `BankInfoForm.tsx` for glassmorphism appearance
 
 ### TypeScript Configuration
 
@@ -170,9 +229,16 @@ UI components use glassmorphism styling: `backdrop-blur-xl bg-white/10 border bo
 5. **Person Removal**: When removing a person, update expenses to reassign their payerId and remove from participantIds
 6. **Bill Navigation**: Pass callbacks to child components (BillList) rather than managing navigation in components
 7. **Big.js Comparison**: Use `.lt()` (less than) method instead of `Big.min()` for finding minimum values
+8. **Settlement Sorting**: Sort settlements by amountOwed ascending (negative → positive) to show debtors first
+9. **React Select Styles**: Define custom styles object for glassmorphism dropdown appearance
+10. **QR Code Loading**: Handle image errors with fallback SVG for failed QR loads
 
 ## Common Issues
 
 - **Card onClick not working**: Ensure Card component props extend `React.HTMLAttributes<HTMLDivElement>` and spread `...props` to the div
 - **Big.js errors**: Remember that `Big.min()` doesn't exist - use comparison operators instead
 - **Screen navigation timing**: Use `setTimeout(..., 0)` when setting state before navigation to ensure state updates are processed
+- **React Select styling**: Custom styles must define all states (control, menu, option, etc.) for glassmorphism effect
+- **QR Code not loading**: Add `onError` handler to img tag with fallback SVG
+- **Share URL too long**: LZString should compress, but very large bills may still exceed URL limits
+- **LocalStorage quota**: Bill data is compressed but many large bills may hit storage limits
