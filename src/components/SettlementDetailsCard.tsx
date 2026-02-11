@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Wallet, ChevronDown, ChevronUp, ChevronsUpDown } from 'lucide-react';
+import { Wallet, ChevronDown, ChevronUp, ChevronsUpDown, QrCode, Download } from 'lucide-react';
 import { Card, CardContent } from './ui/Card';
 import { formatCurrency } from '../utils/calculateSettlement';
 import type { Settlement } from '../types';
@@ -10,14 +10,45 @@ interface SettlementDetailsCardProps {
   settlements: Settlement[];
   personDetailsMap: Map<string, PersonDetails>;
   peopleCount: number;
+  bankCode?: string;
+  accountNumber?: string;
+  billName?: string;
 }
 
 export const SettlementDetailsCard: React.FC<SettlementDetailsCardProps> = ({
   settlements,
   personDetailsMap,
   peopleCount,
+  bankCode,
+  accountNumber,
+  billName = '',
 }) => {
   const [expandedPersonIds, setExpandedPersonIds] = useState<Set<string>>(new Set());
+  const [downloadingQr, setDownloadingQr] = useState<string | null>(null);
+
+  const downloadQR = async (personName: string, amount: number) => {
+    if (!bankCode || !accountNumber) return;
+
+    setDownloadingQr(personName);
+    try {
+      const response = await fetch(
+        `https://img.vietqr.io/image/${bankCode}-${accountNumber}-print.png?amount=${amount}&addInfo=${encodeURIComponent(`${personName} share bill ${billName}`)}`
+      );
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `qr-chuyen-tien-${personName.replace(/\s+/g, '-')}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Failed to download QR:', error);
+    } finally {
+      setDownloadingQr(null);
+    }
+  };
 
   const toggleExpand = (personId: string) => {
     setExpandedPersonIds(prev => {
@@ -45,11 +76,14 @@ export const SettlementDetailsCard: React.FC<SettlementDetailsCardProps> = ({
     <Card>
       <CardContent className="space-y-4">
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl">
-              <Wallet className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+          <div>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl">
+                <Wallet className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-white">Chi tiết công nợ</h3>
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-white">Chi tiết công nợ</h3>
+            <p className="text-xs text-white/40 mt-1 ml-9 sm:ml-11">Nhấn vào dòng để xem chi tiết</p>
           </div>
           <button
             onClick={toggleExpandAll}
@@ -179,6 +213,37 @@ export const SettlementDetailsCard: React.FC<SettlementDetailsCardProps> = ({
 
                       {details.paidExpenses.length === 0 && details.participatedExpenses.length === 0 && (
                         <p className="text-sm text-white/40 text-center py-2">Chưa có giao dịch nào</p>
+                      )}
+
+                      {/* QR Code cho người cần trả tiền */}
+                      {amount < 0 && bankCode && accountNumber && (
+                        <div className="pt-3 border-t border-white/10">
+                          <p className="text-sm font-semibold text-white/80 mb-3 flex items-center gap-2">
+                            <QrCode className="w-4 h-4" />
+                            Chuyển tiền qua QR
+                          </p>
+                          <div className="flex flex-col items-center gap-4">
+                            <div className="bg-white p-0 rounded-2xl shadow-lg">
+                              <img
+                                src={`https://img.vietqr.io/image/${bankCode}-${accountNumber}-print.png?amount=${Math.abs(amount)}&addInfo=${encodeURIComponent(`${settlement.personName} share bill ${billName}`)}`}
+                                alt="VietQR Code"
+                                className="w-64 h-64 sm:w-72 sm:h-72 object-contain"
+                                onError={(e) => {
+                                  console.error('Failed to load QR code:', e);
+                                  (e.target as HTMLImageElement).src = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="224" height="224" viewBox="0 0 200 200"><rect fill="#f3f4f6" width="200" height="200"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#6b7280" font-size="14">Lỗi load QR</text></svg>');
+                                }}
+                              />
+                            </div>
+                            <button
+                              onClick={() => downloadQR(settlement.personName, Math.abs(amount))}
+                              disabled={downloadingQr === settlement.personName}
+                              className="flex items-center justify-center p-2 bg-white/10 hover:bg-white/20 text-white/80 hover:text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                              title="Lưu QR về máy"
+                            >
+                              <Download className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
                       )}
                     </div>
                   </motion.div>

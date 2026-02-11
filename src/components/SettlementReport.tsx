@@ -8,7 +8,6 @@ import { calculatePersonDetails } from '../utils/calculatePersonDetails';
 import { generateShareUrl } from '../utils/shareBill';
 import { BillSummary } from './BillSummary';
 import { SettlementDetailsCard } from './SettlementDetailsCard';
-import { BankQRCode } from './BankQRCode';
 import { OptimalTransactions } from './OptimalTransactions';
 import { BillFooter } from './BillFooter';
 
@@ -81,11 +80,10 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
         settlements={settlements}
         personDetailsMap={personDetailsMap}
         peopleCount={currentBill.people.length}
+        bankCode={currentBill.bankCode}
+        accountNumber={currentBill.accountNumber}
+        billName={currentBill.name}
       />
-
-      {currentBill.bankCode && currentBill.accountNumber && (
-        <BankQRCode bankCode={currentBill.bankCode} accountNumber={currentBill.accountNumber} variant="compact" />
-      )}
 
       <OptimalTransactions transactions={transactions} />
       <BillFooter dateStr={dateStr} />

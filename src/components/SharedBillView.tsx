@@ -6,7 +6,6 @@ import { calculateSettlement } from '../utils/calculateSettlement';
 import { calculatePersonDetails } from '../utils/calculatePersonDetails';
 import { BillSummary } from './BillSummary';
 import { SettlementDetailsCard } from './SettlementDetailsCard';
-import { BankQRCode } from './BankQRCode';
 import { OptimalTransactions } from './OptimalTransactions';
 import { BillFooter } from './BillFooter';
 import type { Bill } from '../types';
@@ -55,12 +54,11 @@ export const SharedBillView: React.FC<SharedBillViewProps> = ({ bill, onGoHome }
         settlements={settlements}
         personDetailsMap={personDetailsMap}
         peopleCount={bill.people.length}
+        bankCode={bill.bankCode}
+        accountNumber={bill.accountNumber}
+        billName={bill.name}
       />
       <OptimalTransactions transactions={transactions} />
-
-      {bill.bankCode && bill.accountNumber && (
-        <BankQRCode bankCode={bill.bankCode} accountNumber={bill.accountNumber} variant="compact" />
-      )}
 
       <BillFooter dateStr={dateStr} />
 
