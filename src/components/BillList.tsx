@@ -55,16 +55,6 @@ export const BillList: React.FC<BillListProps> = ({ onCreateBill, onViewBill, on
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl">
-          <Wallet className="w-6 h-6 text-white" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-white">Danh sách Bill</h1>
-          <p className="text-white/60 text-sm">Các bill đã lưu</p>
-        </div>
-      </div>
-
       {bills.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">

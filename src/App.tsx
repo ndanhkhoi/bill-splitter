@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from './components/layout/Header';
+import { ScreenHeader } from './components/layout/ScreenHeader';
 import { Container } from './components/layout/Container';
 import { StepIndicator } from './components/StepIndicator';
 import { PersonList } from './components/PersonList';
@@ -89,12 +90,7 @@ function App() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
       </div>
 
-      <Header
-        title={screen === 'shared' ? sharedBill?.name || 'Chia Bill' : currentBill?.name || 'Chia Bill'}
-        showBackButton={screen !== 'home' && screen !== 'shared'}
-        onBack={handleBack}
-        onHome={handleGoHome}
-      />
+      <Header onHome={handleGoHome} />
 
       <main className="relative z-10 pb-20">
         <AnimatePresence mode="wait">
@@ -137,6 +133,11 @@ function App() {
               transition={{ duration: 0.3 }}
             >
               <Container>
+                <ScreenHeader
+                  title={currentBill?.name}
+                  showBackButton={true}
+                  onBack={handleBack}
+                />
                 <StepIndicator
                   currentStep={stepIndex[screen]}
                   totalSteps={3}
@@ -168,6 +169,11 @@ function App() {
               transition={{ duration: 0.3 }}
             >
               <Container>
+                <ScreenHeader
+                  title={currentBill?.name}
+                  showBackButton={true}
+                  onBack={handleBack}
+                />
                 <StepIndicator
                   currentStep={stepIndex[screen]}
                   totalSteps={3}
@@ -199,6 +205,11 @@ function App() {
               transition={{ duration: 0.3 }}
             >
               <Container>
+                <ScreenHeader
+                  title={currentBill?.name}
+                  showBackButton={true}
+                  onBack={handleBack}
+                />
                 <StepIndicator
                   currentStep={stepIndex[screen]}
                   totalSteps={3}

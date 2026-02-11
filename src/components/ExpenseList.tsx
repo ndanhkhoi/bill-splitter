@@ -23,6 +23,7 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense, payerName, participa
       exit={{ opacity: 0, x: -20 }}
       className="p-4 bg-white/5 rounded-2xl border border-white/10 group"
     >
+      {/* Main info row */}
       <div className="flex items-start gap-3">
         <div className="p-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl">
           <Receipt className="w-4 h-4 text-white" />
@@ -30,14 +31,6 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense, payerName, participa
         <div className="flex-1 min-w-0">
           <h4 className="text-white font-medium truncate">{expense.name}</h4>
           <p className="text-white/60 text-sm">{payerName} đã trả</p>
-          <div className="flex items-center gap-2 mt-2 flex-wrap">
-            <span className="text-xs text-white/40">Chia:</span>
-            {participantNames.map((name, i) => (
-              <span key={i} className="text-xs px-2 py-1 bg-white/10 rounded-lg text-white/80">
-                {name}
-              </span>
-            ))}
-          </div>
         </div>
         <div className="text-right">
           <p className="text-lg font-bold text-white">{formatCurrency(expense.amount)}</p>
@@ -51,6 +44,16 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense, payerName, participa
         >
           <Trash2 className="w-4 h-4" />
         </button>
+      </div>
+
+      {/* Chia: row - full width */}
+      <div className="flex items-center gap-2 mt-3 ml-11 flex-wrap">
+        <span className="text-xs text-white/40">Chia:</span>
+        {participantNames.map((name, i) => (
+          <span key={i} className="text-xs px-2 py-1 bg-white/10 rounded-lg text-white/80">
+            {name}
+          </span>
+        ))}
       </div>
     </motion.div>
   );
