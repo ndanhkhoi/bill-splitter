@@ -8,7 +8,6 @@ interface StepIndicatorProps {
 
 export const StepIndicator: React.FC<StepIndicatorProps> = ({
   currentStep,
-  totalSteps: _totalSteps,
   steps,
 }) => {
   return (
