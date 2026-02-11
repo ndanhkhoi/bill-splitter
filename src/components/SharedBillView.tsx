@@ -1,16 +1,15 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDownUp, Wallet, Users, Receipt, ChevronDown, ChevronUp, ChevronsUpDown, Share2, Check } from 'lucide-react';
+import { ArrowDownUp, Wallet, Users, Receipt, ChevronDown, ChevronUp, ChevronsUpDown, Home } from 'lucide-react';
 import { Card, CardContent } from './ui/Card';
 import { Button } from './ui/Button';
-import { useBillStore, saveCurrentBillToList } from '../stores/billStore';
 import { calculateSettlement, formatCurrency } from '../utils/calculateSettlement';
-import { generateShareUrl } from '../utils/shareBill';
-import type { Expense } from '../types';
+import type { Bill, Expense } from '../types';
 import Big from 'big.js';
 
-interface SettlementReportProps {
-  onFinish?: () => void;
+interface SharedBillViewProps {
+  bill: Bill;
+  onGoHome: () => void;
 }
 
 // Helper để tính chi tiết cho từng người
@@ -51,51 +50,22 @@ function calculatePersonDetails(personId: string, bill: { expenses: Expense[] })
   };
 }
 
-export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) => {
-  const { currentBill, clearCurrentBill } = useBillStore();
-  const [copied, setCopied] = useState(false);
-  const [shareError, setShareError] = useState(false);
-
+export const SharedBillView: React.FC<SharedBillViewProps> = ({ bill, onGoHome }) => {
   // State để theo dõi những người đang mở rộng chi tiết (cho phép mở nhiều cùng lúc)
   const [expandedPersonIds, setExpandedPersonIds] = useState<Set<string>>(new Set());
 
-  const handleFinish = () => {
-    saveCurrentBillToList();
-    clearCurrentBill();
-    onFinish?.();
-  };
-
-  const handleShare = async () => {
-    if (!currentBill) return;
-
-    try {
-      const shareUrl = generateShareUrl(currentBill);
-      await navigator.clipboard.writeText(shareUrl);
-      setCopied(true);
-      setShareError(false);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      console.error('Failed to copy share link:', error);
-      setShareError(true);
-      setTimeout(() => setShareError(false), 3000);
-    }
-  };
-
   // Tính chi tiết cho từng người
   const personDetailsMap = useMemo(() => {
-    if (!currentBill) return new Map<string, PersonDetails>();
     const map = new Map<string, PersonDetails>();
-    currentBill.people.forEach(person => {
-      map.set(person.id, calculatePersonDetails(person.id, currentBill));
+    bill.people.forEach(person => {
+      map.set(person.id, calculatePersonDetails(person.id, bill));
     });
     return map;
-  }, [currentBill]);
+  }, [bill]);
 
-  if (!currentBill) return null;
+  const { settlements, transactions, total } = calculateSettlement(bill);
 
-  const { settlements, transactions, total } = calculateSettlement(currentBill);
-
-  const dateStr = new Date(currentBill.date).toLocaleDateString('vi-VN', {
+  const dateStr = new Date(bill.date).toLocaleDateString('vi-VN', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -114,16 +84,16 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
   };
 
   const toggleExpandAll = () => {
-    if (expandedPersonIds.size === currentBill.people.length) {
+    if (expandedPersonIds.size === bill.people.length) {
       // Đang mở hết -> thu gọn tất cả
       setExpandedPersonIds(new Set());
     } else {
       // Mở tất cả
-      setExpandedPersonIds(new Set(currentBill.people.map(p => p.id)));
+      setExpandedPersonIds(new Set(bill.people.map(p => p.id)));
     }
   };
 
-  const isAllExpanded = expandedPersonIds.size === currentBill.people.length;
+  const isAllExpanded = expandedPersonIds.size === bill.people.length;
 
   return (
     <div className="space-y-6">
@@ -135,7 +105,11 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
           animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-2"
         >
-          <h1 className="text-3xl font-bold text-white">{currentBill.name}</h1>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-medium mb-4">
+            <Receipt className="w-4 h-4" />
+            Được chia sẻ bởi bạn bè
+          </div>
+          <h1 className="text-3xl font-bold text-white">{bill.name}</h1>
           <p className="text-white/60">{dateStr}</p>
         </motion.div>
 
@@ -155,7 +129,7 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
                   <Users className="w-6 h-6 text-white" />
                 </div>
                 <p className="text-sm text-white/60 mb-1">Số người</p>
-                <p className="text-2xl font-bold text-white">{currentBill.people.length}</p>
+                <p className="text-2xl font-bold text-white">{bill.people.length}</p>
               </div>
             </div>
           </CardContent>
@@ -370,26 +344,9 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
 
       {/* Action Buttons */}
       <div className="flex gap-3">
-        <Button variant="secondary" onClick={handleFinish} className="flex-1">
-          Lưu và về trang chủ
-        </Button>
-        <Button variant="primary" onClick={handleShare} className="flex-shrink-0">
-          {copied ? (
-            <>
-              <Check className="w-5 h-5" />
-              Đã copy!
-            </>
-          ) : shareError ? (
-            <>
-              <Share2 className="w-5 h-5" />
-              Thử lại
-            </>
-          ) : (
-            <>
-              <Share2 className="w-5 h-5" />
-              Chia sẻ
-            </>
-          )}
+        <Button variant="primary" onClick={onGoHome} className="w-full">
+          <Home className="w-5 h-5 mr-2" />
+          Tạo bill của bạn
         </Button>
       </div>
     </div>

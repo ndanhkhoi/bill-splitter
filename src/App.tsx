@@ -8,18 +8,31 @@ import { ExpenseForm } from './components/ExpenseForm';
 import { ExpenseList } from './components/ExpenseList';
 import { SettlementReport } from './components/SettlementReport';
 import { BillList } from './components/BillList';
+import { SharedBillView } from './components/SharedBillView';
 import { useBillStore } from './stores/billStore';
 import { Input } from './components/ui/Input';
 import { Button } from './components/ui/Button';
 import { Sparkles } from 'lucide-react';
+import { parseSharedBillFromUrl } from './utils/shareBill';
+import type { Bill } from './types';
 
-type Screen = 'home' | 'setup' | 'expenses' | 'report';
+type Screen = 'home' | 'setup' | 'expenses' | 'report' | 'shared';
 
 function App() {
   const { currentBill, bills, createBill, clearCurrentBill, setCurrentBill } = useBillStore();
   const [screen, setScreen] = React.useState<Screen>('home');
   const [billName, setBillName] = React.useState('');
   const [showCreateModal, setShowCreateModal] = React.useState(false);
+  const [sharedBill, setSharedBill] = React.useState<Bill | null>(null);
+
+  // Parse URL on mount to check for shared bill
+  React.useEffect(() => {
+    const bill = parseSharedBillFromUrl();
+    if (bill) {
+      setSharedBill(bill);
+      setScreen('shared');
+    }
+  }, []);
 
   const steps = ['Nhóm', 'Chi tiêu', 'Báo cáo'];
   const stepIndex: Record<Screen, number> = {
@@ -27,6 +40,7 @@ function App() {
     setup: 0,
     expenses: 1,
     report: 2,
+    shared: -1,
   };
 
   const handleCreateBill = () => {
@@ -70,8 +84,8 @@ function App() {
       </div>
 
       <Header
-        title={currentBill?.name || 'Chia Bill'}
-        showBackButton={screen !== 'home'}
+        title={screen === 'shared' ? sharedBill?.name || 'Chia Bill' : currentBill?.name || 'Chia Bill'}
+        showBackButton={screen !== 'home' && screen !== 'shared'}
         onBack={handleBack}
       />
 
@@ -183,6 +197,23 @@ function App() {
                   steps={steps}
                 />
                 <SettlementReport onFinish={() => setScreen('home')} />
+              </Container>
+            </motion.div>
+          )}
+
+          {screen === 'shared' && sharedBill && (
+            <motion.div
+              key="shared"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Container>
+                <SharedBillView
+                  bill={sharedBill}
+                  onGoHome={() => setScreen('home')}
+                />
               </Container>
             </motion.div>
           )}
