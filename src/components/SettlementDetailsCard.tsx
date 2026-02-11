@@ -81,7 +81,7 @@ export const SettlementDetailsCard: React.FC<SettlementDetailsCardProps> = ({
               <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl">
                 <Wallet className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-white">Chi tiết công nợ</h3>
+              <h3 className="text-lg sm:text-xl font-bold text-white">Chi tiết chia tiền</h3>
             </div>
             <p className="text-xs text-white/40 mt-1 ml-9 sm:ml-11">Nhấn vào dòng để xem chi tiết</p>
           </div>

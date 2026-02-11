@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Share2, Check } from 'lucide-react';
+import { Share2, Check, Calendar } from 'lucide-react';
 import { Button } from './ui/Button';
 import { useBillStore, saveCurrentBillToList } from '../stores/billStore';
 import { calculateSettlement } from '../utils/calculateSettlement';
@@ -9,7 +9,6 @@ import { generateShareUrl } from '../utils/shareBill';
 import { BillSummary } from './BillSummary';
 import { SettlementDetailsCard } from './SettlementDetailsCard';
 import { OptimalTransactions } from './OptimalTransactions';
-import { BillFooter } from './BillFooter';
 
 interface SettlementReportProps {
   onFinish?: () => void;
@@ -78,11 +77,18 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-2"
       >
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs sm:text-sm font-medium">
+          <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
+          {dateStr}
+        </div>
         <h1 className="text-xl sm:text-2xl font-bold text-white px-4">{currentBill.name}</h1>
-        <p className="text-white/60 text-sm px-4">{dateStr}</p>
       </motion.div>
 
-      <BillSummary total={total} peopleCount={currentBill.people.length} />
+      <BillSummary
+        total={total}
+        peopleCount={currentBill.people.length}
+        expenseCount={currentBill.expenses.length}
+      />
       <SettlementDetailsCard
         settlements={sortedSettlements}
         personDetailsMap={personDetailsMap}
@@ -93,7 +99,6 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
       />
 
       <OptimalTransactions transactions={transactions} />
-      <BillFooter dateStr={dateStr} />
 
       <div className="grid grid-cols-2 gap-3 px-4 sm:px-0">
         <Button variant="secondary" onClick={handleFinish}>

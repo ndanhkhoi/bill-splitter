@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Receipt, Home } from 'lucide-react';
+import { Receipt, Home, Calendar } from 'lucide-react';
 import { Button } from './ui/Button';
 import { calculateSettlement } from '../utils/calculateSettlement';
 import { calculatePersonDetails } from '../utils/calculatePersonDetails';
 import { BillSummary } from './BillSummary';
 import { SettlementDetailsCard } from './SettlementDetailsCard';
 import { OptimalTransactions } from './OptimalTransactions';
-import { BillFooter } from './BillFooter';
 import type { Bill } from '../types';
 
 interface SharedBillViewProps {
@@ -45,18 +44,25 @@ export const SharedBillView: React.FC<SharedBillViewProps> = ({ bill, onGoHome }
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center space-y-2"
+        className="text-center space-y-3"
       >
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-xs sm:text-sm font-medium mb-2 sm:mb-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-xs sm:text-sm font-medium">
           <Receipt className="w-3 h-3 sm:w-4 sm:h-4" />
           <span className="hidden sm:inline">Được chia sẻ bởi bạn bè</span>
           <span className="sm:hidden">Được chia sẻ</span>
         </div>
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs sm:text-sm font-medium">
+          <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
+          {dateStr}
+        </div>
         <h1 className="text-xl sm:text-2xl font-bold text-white px-4">{bill.name}</h1>
-        <p className="text-white/60 text-sm px-4">{dateStr}</p>
       </motion.div>
 
-      <BillSummary total={total} peopleCount={bill.people.length} />
+      <BillSummary
+        total={total}
+        peopleCount={bill.people.length}
+        expenseCount={bill.expenses.length}
+      />
       <SettlementDetailsCard
         settlements={sortedSettlements}
         personDetailsMap={personDetailsMap}
@@ -66,8 +72,6 @@ export const SharedBillView: React.FC<SharedBillViewProps> = ({ bill, onGoHome }
         billName={bill.name}
       />
       <OptimalTransactions transactions={transactions} />
-
-      <BillFooter dateStr={dateStr} />
 
       <div className="flex gap-3 px-4 sm:px-0">
         <Button variant="primary" onClick={onGoHome} className="w-full">

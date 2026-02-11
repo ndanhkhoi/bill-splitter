@@ -14,13 +14,14 @@ import { SharedBillView } from './components/SharedBillView';
 import { useBillStore } from './stores/billStore';
 import { Input } from './components/ui/Input';
 import { Button } from './components/ui/Button';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Heart } from 'lucide-react';
 import { parseSharedBillFromUrl } from './utils/shareBill';
 import type { Bill } from './types';
 
 type Screen = 'home' | 'setup' | 'expenses' | 'report' | 'shared';
 
 function App() {
+  const currentYear = new Date().getFullYear();
   const { currentBill, bills, createBill, clearCurrentBill, setCurrentBill } = useBillStore();
   const [screen, setScreen] = React.useState<Screen>('home');
   const [billName, setBillName] = React.useState('');
@@ -286,6 +287,13 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Footer */}
+      <footer className="relative z-10 py-6 text-center">
+        <p className="text-white/40 text-xs inline-flex items-center gap-1">
+          © {currentYear} | Một sản phẩm của <Heart className="w-3 h-3 text-red-400 fill-red-400" /> <span className="text-white/60 font-medium">Khôi đẹp trai</span>
+        </p>
+      </footer>
     </div>
   );
 }
