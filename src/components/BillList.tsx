@@ -98,7 +98,7 @@ export const BillList: React.FC<BillListProps> = ({ onCreateBill, onViewBill, on
                         </div>
                         <div className="flex items-center gap-1">
                           <Users className="w-4 h-4" />
-                          {bill.people.length} người
+                          {bill.people.length}
                         </div>
                         <div className="flex items-center gap-1">
                           <Wallet className="w-4 h-4" />
