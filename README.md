@@ -205,4 +205,4 @@ MIT License - freely usable for personal and commercial projects.
 
 ---
 
-Made with [Heart](public/favicon.svg) using React + TypeScript + TailwindCSS
+Made with ❤️ using React + TypeScript + TailwindCSS
