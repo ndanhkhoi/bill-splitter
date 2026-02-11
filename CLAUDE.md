@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Project Conventions
+
+- **Minimal Emojis**: Use emojis sparingly in documentation and UI. Prefer clean, professional text over emoji-heavy content.
+- **Vietnamese Language**: All user-facing text should be in Vietnamese. Technical documentation can be bilingual.
+- **Privacy First**: All data stays in localStorage, no server-side storage.
+
 ## Project Overview
 
 Chia Bill is a Vietnamese bill splitting application for groups with a modern glassmorphism UI. Users can create bills, manage participants, track expenses, calculate optimal settlements, add bank information, generate individual QR codes for payments, and share bills via compressed URLs. All data persists locally using localStorage via Zustand's persist middleware.

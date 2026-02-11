@@ -13,6 +13,40 @@
 
 </div>
 
+## Vấn đề & Giải pháp
+
+### Vấn đề
+
+Bạn đi ăn với nhóm bạn, mỗi người order món khác nhau, ai cũng chẳng nhớ mình phải trả bao nhiêu. Cuối cùng:
+
+- Một người thanh toán hết rồi phải "đòi" tiền từng người
+- Tính toán chia tiền thủ công, dễ sai sót
+- Ai trả ít, ai trả nhiều dẫn đến chênh lệch công bằng
+- Khó nhắc nhở mỗi người phải trả đúng số tiền
+- Lưu thông tin ngân hàng của từng người rất lộn xộn
+
+### Giải pháp
+
+**Chia Bill** giải quyết tất cả vấn đề trên:
+
+- Tự động tính toán ai phải trả, ai phải nhận bao nhiêu
+- Tối ưu hóa số lần chuyển tiền (ít chuyển nhất có thể)
+- Tạo QR Code riêng cho từng người với số tiền chính xác
+- Chia sẻ bill qua link, không cần cài đặt app
+- Lưu lại bill cũ để tra cứu khi cần
+- Bảo mật - dữ liệu chỉ lưu trên thiết bị của bạn
+
+### Tại sao lại tạo app này?
+
+App được sinh ra từ nhu cầu thực tế của chính tác giả - mỗi lần đi chơi với bạn bè là phải tính toán chia tiền thủ công, rất bất tiện. Các app hiện tại thì:
+
+- Quá nhiều bước, phức tạp
+- Không hỗ trợ ngân hàng Việt Nam tốt
+- Không tạo QR Code riêng cho từng người
+- Cần tạo tài khoản, đăng nhập mới dùng
+
+**Chia Bill** tập trung vào **đơn giản, nhanh chóng, và đúng với thói quen người Việt**.
+
 ## Tính năng
 
 - **Quản lý bill** - Tạo, xem, sửa, xóa bill dễ dàng
