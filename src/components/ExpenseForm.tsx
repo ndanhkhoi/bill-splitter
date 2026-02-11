@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { DollarSign, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Card, CardContent } from './ui/Card';
 import { Input } from './ui/Input';
 import { Button } from './ui/Button';

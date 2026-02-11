@@ -16,7 +16,7 @@ import { Sparkles } from 'lucide-react';
 type Screen = 'home' | 'setup' | 'expenses' | 'report';
 
 function App() {
-  const { currentBill, createBill, clearCurrentBill } = useBillStore();
+  const { currentBill, bills, createBill, clearCurrentBill, setCurrentBill } = useBillStore();
   const [screen, setScreen] = React.useState<Screen>('home');
   const [billName, setBillName] = React.useState('');
   const [showCreateModal, setShowCreateModal] = React.useState(false);
@@ -88,8 +88,20 @@ function App() {
               <Container>
                 <BillList
                   onCreateBill={() => setShowCreateModal(true)}
-                  onViewBill={(billId) => setScreen('report')}
-                  onEditBill={(billId) => setScreen('setup')}
+                  onViewBill={(billId) => {
+                    const bill = bills.find(b => b.id === billId);
+                    if (bill) {
+                      setCurrentBill(bill);
+                      setScreen('report');
+                    }
+                  }}
+                  onEditBill={(billId) => {
+                    const bill = bills.find(b => b.id === billId);
+                    if (bill) {
+                      setCurrentBill(bill);
+                      setScreen('setup');
+                    }
+                  }}
                 />
               </Container>
             </motion.div>

@@ -8,12 +8,12 @@ interface StepIndicatorProps {
 
 export const StepIndicator: React.FC<StepIndicatorProps> = ({
   currentStep,
-  totalSteps,
+  totalSteps: _totalSteps,
   steps,
 }) => {
   return (
     <div className="flex items-center justify-center gap-2 mb-8">
-      {steps.map((step, index) => (
+      {steps.map((_step, index) => (
         <React.Fragment key={index}>
           <div
             className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium transition-all duration-300

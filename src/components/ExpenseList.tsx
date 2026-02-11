@@ -42,7 +42,7 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense, payerName, participa
         <div className="text-right">
           <p className="text-lg font-bold text-white">{formatCurrency(expense.amount)}</p>
           <p className="text-xs text-white/40">
-            {formatCurrency(new Big(expense.amount).div(participantNames.length))} /người
+            {formatCurrency(new Big(expense.amount).div(participantNames.length).toFixed())} /người
           </p>
         </div>
         <button
@@ -84,7 +84,7 @@ export const ExpenseList: React.FC = () => {
           {currentBill?.expenses && currentBill.expenses.length > 0 && (
             <div className="text-right">
               <p className="text-xs text-white/60">Tổng cộng</p>
-              <p className="text-lg font-bold text-white">{formatCurrency(total)}</p>
+              <p className="text-lg font-bold text-white">{formatCurrency(total.toFixed())}</p>
             </div>
           )}
         </div>
