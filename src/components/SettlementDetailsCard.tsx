@@ -44,17 +44,20 @@ export const SettlementDetailsCard: React.FC<SettlementDetailsCardProps> = ({
   return (
     <Card>
       <CardContent className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
-            <Wallet className="w-5 h-5" />
-            Chi tiết công nợ
-          </h3>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl">
+              <Wallet className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+            </div>
+            <h3 className="text-lg sm:text-xl font-bold text-white">Chi tiết công nợ</h3>
+          </div>
           <button
             onClick={toggleExpandAll}
-            className="text-xs text-white/60 hover:text-white flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+            className="text-xs text-white/60 hover:text-white flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors whitespace-nowrap"
           >
-            <ChevronsUpDown className="w-4 h-4" />
-            {isAllExpanded ? 'Thu gọn tất cả' : 'Mở tất cả'}
+            <ChevronsUpDown className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">{isAllExpanded ? 'Thu gọn tất cả' : 'Mở tất cả'}</span>
+            <span className="sm:hidden">{isAllExpanded ? 'Thu gọn' : 'Mở hết'}</span>
           </button>
         </div>
 
@@ -74,11 +77,11 @@ export const SettlementDetailsCard: React.FC<SettlementDetailsCardProps> = ({
               >
                 {/* Main row - clickable */}
                 <div
-                  className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors"
+                  className="flex items-center justify-between gap-2 sm:gap-3 p-3 sm:p-4 cursor-pointer hover:bg-white/5 transition-colors"
                   onClick={() => toggleExpand(settlement.personId)}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold
+                  <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0
                       ${isOwed
                         ? 'bg-gradient-to-r from-green-500 to-emerald-600'
                         : amount < 0
@@ -86,18 +89,18 @@ export const SettlementDetailsCard: React.FC<SettlementDetailsCardProps> = ({
                           : 'bg-white/20'
                       }`}
                     >
-                      {settlement.personName.charAt(0).toUpperCase()}
+                      <span className="text-sm">{settlement.personName.charAt(0).toUpperCase()}</span>
                     </div>
-                    <div>
-                      <span className="text-white font-medium">{settlement.personName}</span>
+                    <div className="min-w-0">
+                      <span className="text-white font-medium text-sm sm:text-base block truncate">{settlement.personName}</span>
                       {details && details.totalPaid !== '0' && (
                         <p className="text-xs text-white/40">Đã chi: {formatCurrency(details.totalPaid)}</p>
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <div className="text-right">
-                      <p className={`text-lg font-bold
+                      <p className={`text-base sm:text-lg font-bold
                         ${isOwed
                           ? 'text-green-400'
                           : amount < 0
@@ -108,13 +111,13 @@ export const SettlementDetailsCard: React.FC<SettlementDetailsCardProps> = ({
                         {isOwed ? '+' : ''}{formatCurrency(settlement.amountOwed)}
                       </p>
                       <p className="text-xs text-white/40">
-                        {isOwed ? 'Cần nhận lại' : amount < 0 ? 'Cần trả thêm' : 'Đã cân bằng'}
+                        {isOwed ? 'Cần nhận' : amount < 0 ? 'Cần trả' : 'Đã cân bằng'}
                       </p>
                     </div>
                     {isExpanded ? (
-                      <ChevronUp className="w-5 h-5 text-white/60" />
+                      <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-white/60 flex-shrink-0" />
                     ) : (
-                      <ChevronDown className="w-5 h-5 text-white/60" />
+                      <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-white/60 flex-shrink-0" />
                     )}
                   </div>
                 </div>
@@ -127,7 +130,7 @@ export const SettlementDetailsCard: React.FC<SettlementDetailsCardProps> = ({
                     exit={{ height: 0, opacity: 0 }}
                     className="border-t border-white/10"
                   >
-                    <div className="p-4 space-y-4 bg-black/20">
+                    <div className="p-3 sm:p-4 space-y-3 sm:space-y-4 bg-black/20">
                       {/* Đã thanh toán */}
                       {details.paidExpenses.length > 0 && (
                         <div>
@@ -135,7 +138,7 @@ export const SettlementDetailsCard: React.FC<SettlementDetailsCardProps> = ({
                             <span className="w-2 h-2 rounded-full bg-green-500"></span>
                             Đã thanh toán ({details.paidExpenses.length} bill)
                           </p>
-                          <div className="space-y-2 pl-4">
+                          <div className="space-y-2 pl-3 sm:pl-4">
                             {details.paidExpenses.map(({ expense, amount }, idx) => (
                               <div
                                 key={idx}
@@ -160,7 +163,7 @@ export const SettlementDetailsCard: React.FC<SettlementDetailsCardProps> = ({
                             <span className="w-2 h-2 rounded-full bg-blue-500"></span>
                             Tham gia ({details.participatedExpenses.length} bill)
                           </p>
-                          <div className="space-y-2 pl-4">
+                          <div className="space-y-2 pl-3 sm:pl-4">
                             {details.participatedExpenses.map(({ expense, share }, idx) => (
                               <div
                                 key={idx}

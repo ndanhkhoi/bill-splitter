@@ -15,10 +15,12 @@ export const OptimalTransactions: React.FC<OptimalTransactionsProps> = ({ transa
   return (
     <Card className="hidden">
       <CardContent className="space-y-4">
-        <h3 className="text-lg font-bold text-white flex items-center gap-2">
-          <ArrowDownUp className="w-5 h-5" />
-          Cách thanh toán tối ưu
-        </h3>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl">
+            <ArrowDownUp className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+          </div>
+          <h3 className="text-lg sm:text-xl font-bold text-white">Cách thanh toán tối ưu</h3>
+        </div>
 
         <div className="space-y-3">
           {transactions.map((transaction, index) => (
@@ -27,29 +29,29 @@ export const OptimalTransactions: React.FC<OptimalTransactionsProps> = ({ transa
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-2xl border border-white/20"
+              className="flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-2xl border border-white/20"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-pink-600 flex items-center justify-center text-white font-bold">
-                  {transaction.from.charAt(0).toUpperCase()}
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-red-500 to-pink-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+                  <span className="text-sm">{transaction.from.charAt(0).toUpperCase()}</span>
                 </div>
-                <div>
-                  <p className="text-white font-medium">{transaction.from}</p>
+                <div className="min-w-0">
+                  <p className="text-white font-medium text-sm sm:text-base truncate">{transaction.from}</p>
                   <p className="text-xs text-white/60">chuyển cho</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <ArrowDownUp className="w-5 h-5 text-white/60" />
+              <div className="flex items-center gap-2 sm:gap-3">
+                <ArrowDownUp className="w-4 h-4 sm:w-5 sm:h-5 text-white/60 flex-shrink-0" />
                 <div className="text-right">
-                  <p className="text-lg font-bold text-white">{formatCurrency(transaction.amount)}</p>
+                  <p className="text-base sm:text-lg font-bold text-white">{formatCurrency(transaction.amount)}</p>
                 </div>
 
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center text-white font-bold">
-                  {transaction.to.charAt(0).toUpperCase()}
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+                  <span className="text-sm">{transaction.to.charAt(0).toUpperCase()}</span>
                 </div>
-                <div>
-                  <p className="text-white font-medium">{transaction.to}</p>
+                <div className="min-w-0">
+                  <p className="text-white font-medium text-sm sm:text-base truncate">{transaction.to}</p>
                 </div>
               </div>
             </motion.div>

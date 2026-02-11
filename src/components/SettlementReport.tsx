@@ -65,52 +65,50 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
   });
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-6 p-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center space-y-2"
-        >
-          <h1 className="text-3xl font-bold text-white">{currentBill.name}</h1>
-          <p className="text-white/60">{dateStr}</p>
-        </motion.div>
+    <div className="space-y-4 sm:space-y-6">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center space-y-2"
+      >
+        <h1 className="text-xl sm:text-2xl font-bold text-white px-4">{currentBill.name}</h1>
+        <p className="text-white/60 text-sm px-4">{dateStr}</p>
+      </motion.div>
 
-        <BillSummary total={total} peopleCount={currentBill.people.length} />
-        <SettlementDetailsCard
-          settlements={settlements}
-          personDetailsMap={personDetailsMap}
-          peopleCount={currentBill.people.length}
-        />
+      <BillSummary total={total} peopleCount={currentBill.people.length} />
+      <SettlementDetailsCard
+        settlements={settlements}
+        personDetailsMap={personDetailsMap}
+        peopleCount={currentBill.people.length}
+      />
 
-        {currentBill.bankCode && currentBill.accountNumber && (
-          <BankQRCode bankCode={currentBill.bankCode} accountNumber={currentBill.accountNumber} variant="compact" />
-        )}
+      {currentBill.bankCode && currentBill.accountNumber && (
+        <BankQRCode bankCode={currentBill.bankCode} accountNumber={currentBill.accountNumber} variant="compact" />
+      )}
 
-        <OptimalTransactions transactions={transactions} />
-        <BillFooter dateStr={dateStr} />
-      </div>
+      <OptimalTransactions transactions={transactions} />
+      <BillFooter dateStr={dateStr} />
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3 px-4 sm:px-0">
         <Button variant="secondary" onClick={handleFinish}>
-          Lưu bill
+          <span className="text-sm sm:text-base">Lưu bill</span>
         </Button>
         <Button variant="primary" onClick={handleShare}>
           {copied ? (
             <>
-              <Check className="w-5 h-5" />
-              Đã copy!
+              <Check className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-sm sm:text-base">Đã copy!</span>
             </>
           ) : shareError ? (
             <>
-              <Share2 className="w-5 h-5" />
-              Thử lại
+              <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-sm sm:text-base">Thử lại</span>
             </>
           ) : (
             <>
-              <Share2 className="w-5 h-5" />
-              Chia sẻ
+              <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-sm sm:text-base">Chia sẻ</span>
             </>
           )}
         </Button>
