@@ -26,6 +26,13 @@ export const SharedBillView: React.FC<SharedBillViewProps> = ({ bill, onGoHome }
 
   const { settlements, transactions, total } = calculateSettlement(bill);
 
+  // Sắp xếp settlements: từ người âm nhiều nhất (cần trả nhiều nhất) đến dương nhiều nhất (cần nhận nhiều nhất)
+  const sortedSettlements = [...settlements].sort((a, b) => {
+    const amountA = parseFloat(a.amountOwed);
+    const amountB = parseFloat(b.amountOwed);
+    return amountA - amountB; // Tăng dần: âm -> dương
+  });
+
   const dateStr = new Date(bill.date).toLocaleDateString('vi-VN', {
     day: '2-digit',
     month: '2-digit',
@@ -51,7 +58,7 @@ export const SharedBillView: React.FC<SharedBillViewProps> = ({ bill, onGoHome }
 
       <BillSummary total={total} peopleCount={bill.people.length} />
       <SettlementDetailsCard
-        settlements={settlements}
+        settlements={sortedSettlements}
         personDetailsMap={personDetailsMap}
         peopleCount={bill.people.length}
         bankCode={bill.bankCode}

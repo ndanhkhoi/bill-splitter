@@ -57,6 +57,13 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
 
   const { settlements, transactions, total } = calculateSettlement(currentBill);
 
+  // Sắp xếp settlements: từ người âm nhiều nhất (cần trả nhiều nhất) đến dương nhiều nhất (cần nhận nhiều nhất)
+  const sortedSettlements = [...settlements].sort((a, b) => {
+    const amountA = parseFloat(a.amountOwed);
+    const amountB = parseFloat(b.amountOwed);
+    return amountA - amountB; // Tăng dần: âm -> dương
+  });
+
   const dateStr = new Date(currentBill.date).toLocaleDateString('vi-VN', {
     day: '2-digit',
     month: '2-digit',
@@ -77,7 +84,7 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
 
       <BillSummary total={total} peopleCount={currentBill.people.length} />
       <SettlementDetailsCard
-        settlements={settlements}
+        settlements={sortedSettlements}
         personDetailsMap={personDetailsMap}
         peopleCount={currentBill.people.length}
         bankCode={currentBill.bankCode}
