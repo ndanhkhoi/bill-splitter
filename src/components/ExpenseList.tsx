@@ -47,7 +47,7 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense, payerName, participa
         </div>
         <button
           onClick={() => removeExpense(expense.id)}
-          className="p-2 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all opacity-0 group-hover:opacity-100"
+          className="p-2 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all"
         >
           <Trash2 className="w-4 h-4" />
         </button>

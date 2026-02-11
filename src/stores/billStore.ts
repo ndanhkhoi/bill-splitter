@@ -13,6 +13,7 @@ interface BillStore {
   setCurrentBill: (bill: Bill | null) => void;
   deleteBill: (id: string) => void;
   clearCurrentBill: () => void;
+  updateBankInfo: (bankCode?: string, accountNumber?: string) => void;
 }
 
 export const useBillStore = create<BillStore>()(
@@ -112,6 +113,20 @@ export const useBillStore = create<BillStore>()(
           bills: state.bills.filter((b) => b.id !== id),
           currentBill: state.currentBill?.id === id ? null : state.currentBill,
         }));
+      },
+
+      updateBankInfo: (bankCode?: string, accountNumber?: string) => {
+        set((state) => {
+          if (!state.currentBill) return state;
+
+          const updatedBill = {
+            ...state.currentBill,
+            bankCode: bankCode || undefined,
+            accountNumber: accountNumber || undefined,
+          };
+
+          return { currentBill: updatedBill };
+        });
       },
     }),
     {

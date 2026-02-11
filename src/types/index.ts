@@ -17,6 +17,8 @@ export interface Bill {
   date: string;
   people: Person[];
   expenses: Expense[];
+  bankCode?: string; // Mã ngân hàng (tùy chọn)
+  accountNumber?: string; // Số tài khoản người nhận (tùy chọn)
 }
 
 export interface Settlement {

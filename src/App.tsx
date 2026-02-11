@@ -4,6 +4,7 @@ import { Header } from './components/layout/Header';
 import { Container } from './components/layout/Container';
 import { StepIndicator } from './components/StepIndicator';
 import { PersonList } from './components/PersonList';
+import { BankInfoForm } from './components/BankInfoForm';
 import { ExpenseForm } from './components/ExpenseForm';
 import { ExpenseList } from './components/ExpenseList';
 import { SettlementReport } from './components/SettlementReport';
@@ -75,6 +76,11 @@ function App() {
     }
   };
 
+  const handleGoHome = () => {
+    clearCurrentBill();
+    setScreen('home');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Background decorative elements */}
@@ -87,6 +93,7 @@ function App() {
         title={screen === 'shared' ? sharedBill?.name || 'Chia Bill' : currentBill?.name || 'Chia Bill'}
         showBackButton={screen !== 'home' && screen !== 'shared'}
         onBack={handleBack}
+        onHome={handleGoHome}
       />
 
       <main className="relative z-10 pb-20">
@@ -137,6 +144,7 @@ function App() {
                 />
                 <div className="space-y-6">
                   <PersonList />
+                  <BankInfoForm />
                   <Button
                     onClick={handleGoToExpenses}
                     disabled={!currentBill || currentBill.people.length < 2}

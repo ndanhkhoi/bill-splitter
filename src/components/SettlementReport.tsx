@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDownUp, Wallet, Users, Receipt, ChevronDown, ChevronUp, ChevronsUpDown, Share2, Check } from 'lucide-react';
+import { ArrowDownUp, Wallet, Users, Receipt, ChevronDown, ChevronUp, ChevronsUpDown, Share2, Check, QrCode, CreditCard } from 'lucide-react';
 import { Card, CardContent } from './ui/Card';
 import { Button } from './ui/Button';
 import { useBillStore, saveCurrentBillToList } from '../stores/billStore';
@@ -8,6 +8,75 @@ import { calculateSettlement, formatCurrency } from '../utils/calculateSettlemen
 import { generateShareUrl } from '../utils/shareBill';
 import type { Expense } from '../types';
 import Big from 'big.js';
+
+// Danh sách tên ngân hàng đầy đủ
+const BANK_NAMES: Record<string, string> = {
+  'ICB': 'VietinBank',
+  'VCB': 'Vietcombank',
+  'BIDV': 'BIDV',
+  'VBA': 'Agribank',
+  'OCB': 'OCB',
+  'MB': 'MBBank',
+  'TCB': 'Techcombank',
+  'ACB': 'ACB',
+  'VPB': 'VPBank',
+  'TPB': 'TPBank',
+  'STB': 'Sacombank',
+  'HDB': 'HDBank',
+  'VCCB': 'VietCapitalBank',
+  'SCB': 'SCB',
+  'VIB': 'VIB',
+  'SHB': 'SHB',
+  'EIB': 'Eximbank',
+  'MSB': 'MSB',
+  'CAKE': 'CAKE',
+  'Ubank': 'Ubank',
+  'VTLMONEY': 'ViettelMoney',
+  'TIMO': 'Timo',
+  'VNPTMONEY': 'VNPTMoney',
+  'SGICB': 'SaigonBank',
+  'BAB': 'BacABank',
+  'momo': 'MoMo',
+  'PVDB': 'PVcomBank Pay',
+  'PVCB': 'PVcomBank',
+  'MBV': 'MBV',
+  'NCB': 'NCB',
+  'SHBVN': 'ShinhanBank',
+  'ABB': 'ABBANK',
+  'VAB': 'VietABank',
+  'NAB': 'NamABank',
+  'PGB': 'PGBank',
+  'VIETBANK': 'VietBank',
+  'BVB': 'BaoVietBank',
+  'SEAB': 'SeABank',
+  'COOPBANK': 'COOPBANK',
+  'LPB': 'LPBank',
+  'KLB': 'KienLongBank',
+  'KBank': 'KBank',
+  'MAFC': 'MAFC',
+  'HLBVN': 'HongLeong',
+  'KEBHANAHN': 'KEBHANAHN',
+  'KEBHANAHCM': 'KEBHanaHCM',
+  'CITIBANK': 'Citibank',
+  'CBB': 'CBBank',
+  'CIMB': 'CIMB',
+  'DBS': 'DBSBank',
+  'Vikki': 'Vikki',
+  'VBSP': 'VBSP',
+  'GPB': 'GPBank',
+  'KBHCM': 'KookminHCM',
+  'KBHN': 'KookminHN',
+  'WVN': 'Woori',
+  'VRB': 'VRB',
+  'HSBC': 'HSBC',
+  'IBK - HN': 'IBKHN',
+  'IBK - HCM': 'IBKHCM',
+  'IVB': 'IndovinaBank',
+  'UOB': 'UnitedOverseas',
+  'NHB HN': 'Nonghyup',
+  'SCVN': 'StandardChartered',
+  'PBVN': 'PublicBank',
+};
 
 interface SettlementReportProps {
   onFinish?: () => void;
@@ -67,6 +136,9 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
 
   const handleShare = async () => {
     if (!currentBill) return;
+
+    // Tự động lưu bill trước khi chia sẻ
+    saveCurrentBillToList();
 
     try {
       const shareUrl = generateShareUrl(currentBill);
@@ -307,9 +379,56 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
           </CardContent>
         </Card>
 
-        {/* Transactions */}
-        {transactions.length > 0 && (
+        {/* QR Code - Hiển thị nếu có thông tin ngân hàng */}
+        {currentBill.bankCode && currentBill.accountNumber && (
           <Card>
+            <CardContent className="space-y-4">
+              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <QrCode className="w-5 h-5" />
+                Chuyển tiền qua QR
+              </h3>
+
+              <div className="space-y-4">
+                {/* QR Code Image */}
+                <div className="flex justify-center">
+                  <div className="bg-white p-4 rounded-2xl shadow-lg">
+                    <img
+                      src={`https://img.vietqr.io/image/${currentBill.bankCode}-${currentBill.accountNumber}-compact.jpg`}
+                      alt="VietQR Code"
+                      className="w-64 h-64 object-contain"
+                      onError={(e) => {
+                        console.error('Failed to load QR code:', e);
+                        (e.target as HTMLImageElement).src = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect fill="#f3f4f6" width="200" height="200"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#6b7280" font-size="14">Lỗi load QR</text></svg>');
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Bank Info */}
+                <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-green-500/20 to-teal-600/20 rounded-2xl border border-white/20">
+                  <CreditCard className="w-8 h-8 text-green-400" />
+                  <div className="flex-1">
+                    <p className="text-white font-bold text-lg">{BANK_NAMES[currentBill.bankCode] || currentBill.bankCode}</p>
+                    <p className="text-white/80 font-mono">{currentBill.accountNumber}</p>
+                  </div>
+                </div>
+
+                {/* Instructions */}
+                <div className="w-full p-4 bg-blue-500/10 rounded-xl border border-blue-500/20">
+                  <p className="text-sm text-white/70 text-center">
+                    1. Mở app ngân hàng của bạn<br />
+                    2. Chọn "Quét mã" hoặc "VietQR"<br />
+                    3. Quét mã bên trên để chuyển tiền
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Transactions - Ẩn tạm thời, xóa class 'hidden' để hiển thị lại */}
+        {transactions.length > 0 && (
+          <Card className="hidden">
             <CardContent className="space-y-4">
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
                 <ArrowDownUp className="w-5 h-5" />
@@ -369,11 +488,11 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-3">
-        <Button variant="secondary" onClick={handleFinish} className="flex-1">
-          Lưu và về trang chủ
+      <div className="grid grid-cols-2 gap-3">
+        <Button variant="secondary" onClick={handleFinish}>
+          Lưu bill
         </Button>
-        <Button variant="primary" onClick={handleShare} className="flex-shrink-0">
+        <Button variant="primary" onClick={handleShare}>
           {copied ? (
             <>
               <Check className="w-5 h-5" />

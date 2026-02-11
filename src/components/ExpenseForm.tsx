@@ -1,41 +1,129 @@
 import React, { useState } from 'react';
+import Select from 'react-select';
 import { Plus } from 'lucide-react';
 import { Card, CardContent } from './ui/Card';
 import { Input } from './ui/Input';
 import { Button } from './ui/Button';
-import { Select } from './ui/Select';
 import { Checkbox } from './ui/Checkbox';
 import { useBillStore } from '../stores/billStore';
 import { parseCurrencyInput, formatCurrency } from '../utils/calculateSettlement';
+import { ChevronDown } from 'lucide-react';
+
+interface PersonOption {
+  value: string;
+  label: string;
+}
+
+// Custom styles cho react-select - tương tự BankInfoForm
+const customStyles = {
+  control: (provided: any) => ({
+    ...provided,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    borderRadius: '1rem',
+    padding: '4px',
+    minHeight: '52px',
+    cursor: 'pointer',
+    '&:hover': {
+      borderColor: 'rgba(168, 85, 247, 0.5)',
+    },
+  }),
+  valueContainer: (provided: any) => ({
+    ...provided,
+    padding: '0 12px',
+    color: 'white',
+  }),
+  input: (provided: any) => ({
+    ...provided,
+    color: 'white',
+    margin: '0',
+  }),
+  placeholder: (provided: any) => ({
+    ...provided,
+    color: 'rgba(255, 255, 255, 0.5)',
+  }),
+  singleValue: (provided: any) => ({
+    ...provided,
+    color: 'white',
+    fontWeight: '500',
+  }),
+  menu: (provided: any) => ({
+    ...provided,
+    backgroundColor: '#1f2937',
+    borderRadius: '1rem',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    marginTop: '8px',
+    zIndex: 50,
+  }),
+  menuList: (provided: any) => ({
+    ...provided,
+    padding: '8px',
+    borderRadius: '1rem',
+    maxHeight: '200px',
+  }),
+  option: (provided: any, state: any) => ({
+    ...provided,
+    backgroundColor: state.isFocused ? 'rgba(168, 85, 247, 0.3)' : 'transparent',
+    color: state.isFocused ? 'white' : 'rgba(255, 255, 255, 0.8)',
+    padding: '12px 16px',
+    borderRadius: '0.75rem',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: 'rgba(168, 85, 247, 0.3)',
+    },
+    '&:active': {
+      backgroundColor: 'rgba(168, 85, 247, 0.5)',
+    },
+  }),
+  indicatorSeparator: () => ({
+    display: 'none',
+  }),
+  dropdownIndicator: (provided: any) => ({
+    ...provided,
+    color: 'rgba(255, 255, 255, 0.6)',
+    padding: '8px',
+    '&:hover': {
+      color: 'rgba(255, 255, 255, 0.8)',
+    },
+  }),
+  noOptionsMessage: (provided: any) => ({
+    ...provided,
+    color: 'rgba(255, 255, 255, 0.5)',
+  }),
+};
+
+const DropdownIndicator = () => (
+  <ChevronDown className="w-5 h-5 text-white/60 mr-2" />
+);
 
 export const ExpenseForm: React.FC = () => {
   const { currentBill, addExpense } = useBillStore();
   const [expenseName, setExpenseName] = useState('');
   const [expenseAmount, setExpenseAmount] = useState('');
-  const [payerId, setPayerId] = useState('');
+  const [selectedPayer, setSelectedPayer] = useState<PersonOption | null>(null);
   const [participantIds, setParticipantIds] = useState<string[]>([]);
 
-  const payerOptions = currentBill?.people.map(p => ({
+  const payerOptions: PersonOption[] = currentBill?.people.map(p => ({
     value: p.id,
     label: p.name,
   })) || [];
 
   const handleSubmit = () => {
-    if (!expenseName.trim() || !expenseAmount || !payerId || participantIds.length === 0) {
+    if (!expenseName.trim() || !expenseAmount || !selectedPayer?.value || participantIds.length === 0) {
       return;
     }
 
     addExpense({
       name: expenseName.trim(),
       amount: parseCurrencyInput(expenseAmount),
-      payerId,
+      payerId: selectedPayer.value,
       participantIds,
     });
 
     // Reset form
     setExpenseName('');
     setExpenseAmount('');
-    setPayerId('');
+    setSelectedPayer(null);
     setParticipantIds([]);
   };
 
@@ -88,13 +176,22 @@ export const ExpenseForm: React.FC = () => {
           </div>
         </div>
 
-        <Select
-          label="Người trả tiền"
-          value={payerId}
-          onChange={setPayerId}
-          options={payerOptions}
-          placeholder="Chọn người trả..."
-        />
+        <div>
+          <label className="text-sm font-medium text-white/80 mb-2 block">
+            Người trả tiền
+          </label>
+          <Select
+            value={selectedPayer}
+            onChange={(option) => setSelectedPayer(option)}
+            options={payerOptions}
+            placeholder="Tìm kiếm người trả..."
+            styles={customStyles}
+            isSearchable
+            isClearable
+            components={{ DropdownIndicator }}
+            noOptionsMessage={() => 'Không tìm thấy người'}
+          />
+        </div>
 
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -129,7 +226,7 @@ export const ExpenseForm: React.FC = () => {
 
         <Button
           onClick={handleSubmit}
-          disabled={!expenseName.trim() || !expenseAmount || !payerId || participantIds.length === 0}
+          disabled={!expenseName.trim() || !expenseAmount || !selectedPayer?.value || participantIds.length === 0}
           className="w-full"
         >
           <Plus className="w-5 h-5 mr-2" />

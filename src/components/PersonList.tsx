@@ -64,7 +64,7 @@ export const PersonList: React.FC = () => {
                 <span className="flex-1 text-white font-medium">{person.name}</span>
                 <button
                   onClick={() => removePerson(person.id)}
-                  className="p-2 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                  className="p-2 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all"
                 >
                   <X className="w-5 h-5" />
                 </button>
