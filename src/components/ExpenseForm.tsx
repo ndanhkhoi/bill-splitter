@@ -25,7 +25,7 @@ const customStyles = {
     minHeight: '52px',
     cursor: 'pointer',
     '&:hover': {
-      borderColor: 'rgba(6, 182, 212, 0.5)',
+      borderColor: 'rgba(14, 165, 233, 0.5)',
     },
   }),
   valueContainer: (provided: any) => ({
@@ -51,28 +51,30 @@ const customStyles = {
     ...provided,
     backgroundColor: '#18181b',
     borderRadius: '0.75rem',
-    border: '1px solid #27272a',
+    border: '1px solid #3f3f46',
     marginTop: '8px',
     zIndex: 50,
+    boxShadow: '0 10px 40px rgba(0, 0, 0, 0.5)',
   }),
   menuList: (provided: any) => ({
     ...provided,
     padding: '8px',
     borderRadius: '0.75rem',
     maxHeight: '200px',
+    backgroundColor: '#18181b',
   }),
   option: (provided: any, state: any) => ({
     ...provided,
-    backgroundColor: state.isFocused ? 'rgba(6, 182, 212, 0.2)' : 'transparent',
+    backgroundColor: state.isFocused ? 'rgba(14, 165, 233, 0.2)' : 'transparent',
     color: state.isFocused ? '#fafafa' : '#a1a1aa',
     padding: '12px 16px',
     borderRadius: '0.5rem',
     cursor: 'pointer',
     '&:hover': {
-      backgroundColor: 'rgba(6, 182, 212, 0.2)',
+      backgroundColor: 'rgba(14, 165, 233, 0.2)',
     },
     '&:active': {
-      backgroundColor: 'rgba(6, 182, 212, 0.3)',
+      backgroundColor: 'rgba(14, 165, 233, 0.3)',
     },
   }),
   indicatorSeparator: () => ({
