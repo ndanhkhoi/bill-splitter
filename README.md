@@ -2,9 +2,9 @@
 
 <div align="center">
 
-![Chia Bill Logo](public/favicon.svg)
+![Chia Bill Logo](public/logo.svg)
 
-**Ứng dụng chia tiền bill miễn phí với giao diện Glassmorphism hiện đại**
+**Ứng dụng chia tiền bill miễn phí**
 
 [![React](https://img.shields.io/badge/React-19.2-blue)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
