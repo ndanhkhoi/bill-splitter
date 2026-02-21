@@ -14,65 +14,65 @@ interface PersonOption {
   label: string;
 }
 
-// Custom styles cho react-select - tương tự BankInfoForm
+// Custom styles cho react-select - Dark theme
 const customStyles = {
   control: (provided: any) => ({
     ...provided,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
-    borderRadius: '1rem',
+    backgroundColor: 'rgba(24, 24, 27, 0.5)',
+    border: '1px solid #27272a',
+    borderRadius: '0.75rem',
     padding: '4px',
     minHeight: '52px',
     cursor: 'pointer',
     '&:hover': {
-      borderColor: 'rgba(168, 85, 247, 0.5)',
+      borderColor: 'rgba(6, 182, 212, 0.5)',
     },
   }),
   valueContainer: (provided: any) => ({
     ...provided,
     padding: '0 12px',
-    color: 'white',
+    color: '#fafafa',
   }),
   input: (provided: any) => ({
     ...provided,
-    color: 'white',
+    color: '#fafafa',
     margin: '0',
   }),
   placeholder: (provided: any) => ({
     ...provided,
-    color: 'rgba(255, 255, 255, 0.5)',
+    color: '#71717a',
   }),
   singleValue: (provided: any) => ({
     ...provided,
-    color: 'white',
+    color: '#fafafa',
     fontWeight: '500',
   }),
   menu: (provided: any) => ({
     ...provided,
-    backgroundColor: '#1f2937',
-    borderRadius: '1rem',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
+    backgroundColor: '#18181b',
+    borderRadius: '0.75rem',
+    border: '1px solid #27272a',
     marginTop: '8px',
     zIndex: 50,
   }),
   menuList: (provided: any) => ({
     ...provided,
     padding: '8px',
-    borderRadius: '1rem',
+    borderRadius: '0.75rem',
     maxHeight: '200px',
   }),
   option: (provided: any, state: any) => ({
     ...provided,
-    backgroundColor: state.isFocused ? 'rgba(168, 85, 247, 0.3)' : 'transparent',
-    color: state.isFocused ? 'white' : 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: state.isFocused ? 'rgba(6, 182, 212, 0.2)' : 'transparent',
+    color: state.isFocused ? '#fafafa' : '#a1a1aa',
     padding: '12px 16px',
-    borderRadius: '0.75rem',
+    borderRadius: '0.5rem',
     cursor: 'pointer',
     '&:hover': {
-      backgroundColor: 'rgba(168, 85, 247, 0.3)',
+      backgroundColor: 'rgba(6, 182, 212, 0.2)',
     },
     '&:active': {
-      backgroundColor: 'rgba(168, 85, 247, 0.5)',
+      backgroundColor: 'rgba(6, 182, 212, 0.3)',
     },
   }),
   indicatorSeparator: () => ({
@@ -80,20 +80,20 @@ const customStyles = {
   }),
   dropdownIndicator: (provided: any) => ({
     ...provided,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: '#71717a',
     padding: '8px',
     '&:hover': {
-      color: 'rgba(255, 255, 255, 0.8)',
+      color: '#a1a1aa',
     },
   }),
   noOptionsMessage: (provided: any) => ({
     ...provided,
-    color: 'rgba(255, 255, 255, 0.5)',
+    color: '#71717a',
   }),
 };
 
 const DropdownIndicator = () => (
-  <ChevronDown className="w-5 h-5 text-white/60 mr-2" />
+  <ChevronDown className="w-5 h-5 text-zinc-500 mr-2" />
 );
 
 export const ExpenseForm: React.FC = () => {
@@ -147,10 +147,10 @@ export const ExpenseForm: React.FC = () => {
     <Card className="w-full">
       <CardContent className="space-y-6">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl">
+          <div className="p-2 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl">
             <Plus className="w-5 h-5 text-white" />
           </div>
-          <h2 className="text-xl font-bold text-white">Thêm chi tiêu</h2>
+          <h2 className="text-xl font-bold text-zinc-100">Thêm chi tiêu</h2>
         </div>
 
         <Input
@@ -169,7 +169,7 @@ export const ExpenseForm: React.FC = () => {
               onChange={(e) => setExpenseAmount(e.target.value.replace(/[^\d]/g, ''))}
             />
             {expenseAmount && (
-              <div className="absolute right-4 bottom-3 text-white/60 text-sm">
+              <div className="absolute right-4 bottom-3 text-zinc-500 text-sm">
                 {formatCurrency(parseCurrencyInput(expenseAmount))}
               </div>
             )}
@@ -177,7 +177,7 @@ export const ExpenseForm: React.FC = () => {
         </div>
 
         <div>
-          <label className="text-sm font-medium text-white/80 mb-2 block">
+          <label className="text-sm font-medium text-zinc-300 mb-2 block">
             Người trả tiền
           </label>
           <Select
@@ -195,10 +195,10 @@ export const ExpenseForm: React.FC = () => {
 
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-white/80">Người chia sẻ</label>
+            <label className="text-sm font-medium text-zinc-300">Người chia sẻ</label>
             <button
               onClick={handleSelectAll}
-              className="text-xs text-purple-400 hover:text-purple-300 transition-colors"
+              className="text-xs text-sky-400 hover:text-sky-300 transition-colors cursor-pointer"
             >
               {currentBill && participantIds.length === currentBill.people.length
                 ? 'Bỏ chọn tất cả'
@@ -218,7 +218,7 @@ export const ExpenseForm: React.FC = () => {
           </div>
 
           {currentBill?.people.length === 0 && (
-            <p className="text-center text-white/40 text-sm py-4">
+            <p className="text-center text-zinc-500 text-sm py-4">
               Chưa có người tham gia nào
             </p>
           )}

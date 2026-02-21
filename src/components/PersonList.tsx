@@ -27,10 +27,10 @@ export const PersonList: React.FC = () => {
     <Card className="w-full">
       <CardContent className="space-y-6">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl">
+          <div className="p-2 bg-gradient-to-r from-sky-500 to-sky-600 rounded-xl">
             <Users className="w-5 h-5 text-white" />
           </div>
-          <h2 className="text-xl font-bold text-white">Người tham gia</h2>
+          <h2 className="text-xl font-bold text-zinc-100">Người tham gia</h2>
         </div>
 
         {/* Add Person Input */}
@@ -56,15 +56,15 @@ export const PersonList: React.FC = () => {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="flex items-center gap-3 p-3 bg-white/5 rounded-2xl border border-white/10 group"
+                className="flex items-center gap-3 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 group"
               >
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-sky-500 to-sky-600 flex items-center justify-center text-white font-bold">
                   {person.name.charAt(0).toUpperCase()}
                 </div>
-                <span className="flex-1 text-white font-medium">{person.name}</span>
+                <span className="flex-1 text-zinc-100 font-medium">{person.name}</span>
                 <button
                   onClick={() => removePerson(person.id)}
-                  className="p-2 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all"
+                  className="p-2 text-zinc-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -73,7 +73,7 @@ export const PersonList: React.FC = () => {
           </AnimatePresence>
 
           {currentBill?.people.length === 0 && (
-            <div className="text-center py-8 text-white/40">
+            <div className="text-center py-8 text-zinc-500">
               <Users className="w-12 h-12 mx-auto mb-3 opacity-50" />
               <p>Chưa có người tham gia nào</p>
               <p className="text-sm">Nhập tên và nhấn thêm để bắt đầu</p>
@@ -82,9 +82,9 @@ export const PersonList: React.FC = () => {
         </div>
 
         {currentBill?.people && currentBill.people.length > 0 && (
-          <div className="pt-4 border-t border-white/10">
-            <p className="text-center text-white/60 text-sm">
-              Đã có <span className="font-bold text-white">{currentBill.people.length}</span> người tham gia
+          <div className="pt-4 border-t border-zinc-800">
+            <p className="text-center text-zinc-400 text-sm">
+              Đã có <span className="font-bold text-zinc-200">{currentBill.people.length}</span> người tham gia
             </p>
           </div>
         )}

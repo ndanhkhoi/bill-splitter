@@ -58,9 +58,9 @@ export const BillList: React.FC<BillListProps> = ({ onCreateBill, onViewBill, on
       {bills.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <Wallet className="w-16 h-16 mx-auto mb-4 text-white/20" />
-            <p className="text-white/60 mb-2">Chưa có bill nào</p>
-            <p className="text-white/40 text-sm">Tạo bill mới để bắt đầu</p>
+            <Wallet className="w-16 h-16 mx-auto mb-4 text-zinc-700" />
+            <p className="text-zinc-400 mb-2">Chưa có bill nào</p>
+            <p className="text-zinc-500 text-sm">Tạo bill mới để bắt đầu</p>
           </CardContent>
         </Card>
       ) : (
@@ -74,14 +74,14 @@ export const BillList: React.FC<BillListProps> = ({ onCreateBill, onViewBill, on
               transition={{ type: 'spring', stiffness: 300 }}
             >
               <Card
-                className="cursor-pointer hover:border-purple-500/50 transition-all group"
+                className="cursor-pointer hover:border-sky-500/50 transition-all group"
                 onClick={() => handleViewBill(bill.id)}
               >
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <CardTitle>{bill.name}</CardTitle>
-                      <div className="flex items-center gap-4 mt-2 text-sm text-white/60">
+                      <div className="flex items-center gap-4 mt-2 text-sm text-zinc-500">
                         <div className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
                           {formatDate(bill.date)}
@@ -102,14 +102,14 @@ export const BillList: React.FC<BillListProps> = ({ onCreateBill, onViewBill, on
                           e.stopPropagation();
                           handleEditBill(bill.id);
                         }}
-                        className="p-2 text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 rounded-xl transition-all"
+                        className="p-2 text-sky-400 hover:text-sky-300 hover:bg-sky-500/10 rounded-xl transition-all cursor-pointer"
                         title="Sửa bill"
                       >
                         <Edit2 className="w-5 h-5" />
                       </button>
                       <button
                         onClick={(e) => handleDeleteBill(e, bill.id)}
-                        className="p-2 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all"
+                        className="p-2 text-zinc-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all cursor-pointer"
                         title="Xóa bill"
                       >
                         <Trash2 className="w-5 h-5" />
@@ -123,13 +123,13 @@ export const BillList: React.FC<BillListProps> = ({ onCreateBill, onViewBill, on
                       {bill.expenses.slice(0, 3).map((exp) => (
                         <span
                           key={exp.id}
-                          className="px-3 py-1 bg-white/10 rounded-full text-xs text-white/80"
+                          className="px-3 py-1 bg-zinc-800 rounded-full text-xs text-zinc-400"
                         >
                           {exp.name}
                         </span>
                       ))}
                       {bill.expenses.length > 3 && (
-                        <span className="px-3 py-1 bg-white/5 rounded-full text-xs text-white/60">
+                        <span className="px-3 py-1 bg-zinc-800/50 rounded-full text-xs text-zinc-500">
                           +{bill.expenses.length - 3} nữa
                         </span>
                       )}

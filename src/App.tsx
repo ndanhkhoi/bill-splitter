@@ -84,11 +84,12 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Background decorative elements */}
+    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-slate-950 to-zinc-950">
+      {/* Background decorative elements - Dark modern theme */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-sky-500/5 rounded-full blur-3xl" />
       </div>
 
       <Header onHome={handleGoHome} />
@@ -255,9 +256,9 @@ function App() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-6"
+              className="w-full max-w-md glass-dark rounded-2xl shadow-2xl shadow-black/50 p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-6">Tạo Bill mới</h2>
+              <h2 className="text-2xl font-bold text-zinc-100 mb-6">Tạo Bill mới</h2>
               <div className="space-y-4">
                 <Input
                   label="Tên buổi chơi / nhóm"
@@ -290,8 +291,8 @@ function App() {
 
       {/* Footer */}
       <footer className="relative z-10 py-6 text-center">
-        <p className="text-white/40 text-xs inline-flex items-center gap-1">
-          © {currentYear} | Một sản phẩm của <Heart className="w-3 h-3 text-red-400 fill-red-400" /> <span className="text-white/60 font-medium">Khôi đẹp trai</span>
+        <p className="text-zinc-500 text-xs inline-flex items-center gap-1">
+          © {currentYear} | Một sản phẩm của <Heart className="w-3 h-3 text-rose-500 fill-rose-500" /> <span className="text-zinc-400 font-medium">Khôi đẹp trai</span>
         </p>
       </footer>
     </div>

@@ -19,14 +19,14 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
       {showBackButton && (
         <button
           onClick={onBack}
-          className="p-2 -ml-2 rounded-xl hover:bg-white/10 transition-colors"
+          className="p-2 -ml-2 rounded-xl hover:bg-zinc-800/50 transition-colors cursor-pointer"
           aria-label="Quay lại"
         >
-          <ChevronLeft className="w-6 h-6 text-white" />
+          <ChevronLeft className="w-6 h-6 text-zinc-400" />
         </button>
       )}
       {title && (
-        <h2 className="text-2xl font-bold text-white">{title}</h2>
+        <h2 className="text-2xl font-bold text-zinc-100">{title}</h2>
       )}
     </div>
   );

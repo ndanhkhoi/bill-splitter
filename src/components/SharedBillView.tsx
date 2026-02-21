@@ -46,16 +46,16 @@ export const SharedBillView: React.FC<SharedBillViewProps> = ({ bill, onGoHome }
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-3"
       >
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-xs sm:text-sm font-medium">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-medium">
           <Receipt className="w-3 h-3 sm:w-4 sm:h-4" />
           <span className="hidden sm:inline">Được chia sẻ bởi bạn bè</span>
           <span className="sm:hidden">Được chia sẻ</span>
         </div>
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs sm:text-sm font-medium">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 text-xs sm:text-sm font-medium">
           <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
           {dateStr}
         </div>
-        <h1 className="text-xl sm:text-2xl font-bold text-white px-4">{bill.name}</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-zinc-100 px-4">{bill.name}</h1>
       </motion.div>
 
       <BillSummary

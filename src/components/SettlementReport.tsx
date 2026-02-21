@@ -77,11 +77,11 @@ export const SettlementReport: React.FC<SettlementReportProps> = ({ onFinish }) 
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-2"
       >
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs sm:text-sm font-medium">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 text-xs sm:text-sm font-medium">
           <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
           {dateStr}
         </div>
-        <h1 className="text-xl sm:text-2xl font-bold text-white px-4">{currentBill.name}</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-zinc-100 px-4">{currentBill.name}</h1>
       </motion.div>
 
       <BillSummary

@@ -25,21 +25,21 @@ export const Select: React.FC<SelectProps> = ({
   return (
     <div className="flex flex-col gap-2">
       {label && (
-        <label className="text-sm font-medium text-white/80">{label}</label>
+        <label className="text-sm font-medium text-zinc-300">{label}</label>
       )}
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-full px-4 py-3 bg-white/5 border border-white/20 rounded-2xl
-                   text-white
-                   focus:outline-none focus:ring-2 focus:ring-purple-500/50
+        className={`w-full px-4 py-3 bg-zinc-900/50 border border-zinc-800 rounded-xl
+                   text-zinc-100
+                   focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50
                    backdrop-blur-xl transition-all cursor-pointer ${className}`}
       >
-        <option value="" className="bg-gray-800">
+        <option value="" className="bg-zinc-900">
           {placeholder}
         </option>
         {options.map((option) => (
-          <option key={option.value} value={option.value} className="bg-gray-800">
+          <option key={option.value} value={option.value} className="bg-zinc-900">
             {option.label}
           </option>
         ))}

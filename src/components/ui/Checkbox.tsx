@@ -23,10 +23,10 @@ export const Checkbox: React.FC<CheckboxProps> = ({
           className="sr-only"
         />
         <div
-          className={`w-6 h-6 rounded-xl border-2 transition-all duration-200 flex items-center justify-center
+          className={`w-6 h-6 rounded-lg border-2 transition-all duration-200 flex items-center justify-center
             ${checked
-              ? 'bg-gradient-to-r from-blue-500 to-purple-600 border-transparent'
-              : 'border-white/30 bg-white/5'
+              ? 'bg-gradient-to-r from-sky-500 to-sky-600 border-transparent'
+              : 'border-zinc-600 bg-zinc-900/50 hover:border-zinc-500'
             }`}
         >
           {checked && (
@@ -46,7 +46,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
           )}
         </div>
       </div>
-      {label && <span className="text-white/90">{label}</span>}
+      {label && <span className="text-zinc-300">{label}</span>}
     </label>
   );
 };

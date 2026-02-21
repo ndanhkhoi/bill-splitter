@@ -17,10 +17,10 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
           <div
             className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium transition-all duration-300
               ${index === currentStep
-                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-purple-500/30 scale-110'
+                ? 'bg-gradient-to-r from-sky-500 to-sky-600 text-white shadow-lg shadow-sky-500/30 scale-110'
                 : index < currentStep
-                  ? 'bg-green-500/80 text-white'
-                  : 'bg-white/10 text-white/50'
+                  ? 'bg-emerald-500/80 text-white'
+                  : 'bg-zinc-800 text-zinc-500'
               }`}
           >
             {index < currentStep ? (
@@ -34,7 +34,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
           {index < steps.length - 1 && (
             <div
               className={`w-12 h-0.5 rounded-full transition-all duration-300
-                ${index < currentStep ? 'bg-green-500/80' : 'bg-white/10'}`}
+                ${index < currentStep ? 'bg-emerald-500/80' : 'bg-zinc-800'}`}
             />
           )}
         </React.Fragment>
